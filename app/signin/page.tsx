@@ -38,11 +38,11 @@ export default function SignIn() {
           />
         </div>
         <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-200">
-          Convex + Next.js + Convex Auth
+          Pixel Empire
         </h1>
         <p className="text-slate-600 dark:text-slate-400">
-          This demo uses Convex Auth for authentication, so you will need to
-          sign in or sign up to access the demo.
+          Build your empire. Gather resources, trade, and climb the leaderboard.
+          Sign in or sign up to start your journey.
         </p>
       </div>
       <form

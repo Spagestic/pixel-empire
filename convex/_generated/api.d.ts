@@ -10,7 +10,11 @@
 
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
+import type * as init from "../init.js";
+import type * as market from "../market.js";
 import type * as myFunctions from "../myFunctions.js";
+import type * as players from "../players.js";
+import type * as resources from "../resources.js";
 
 import type {
   ApiFromModules,
@@ -21,7 +25,11 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   http: typeof http;
+  init: typeof init;
+  market: typeof market;
   myFunctions: typeof myFunctions;
+  players: typeof players;
+  resources: typeof resources;
 }>;
 
 /**
