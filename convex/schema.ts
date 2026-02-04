@@ -7,7 +7,42 @@ import { authTables } from "@convex-dev/auth/server";
 // The schema provides more precise TypeScript types.
 export default defineSchema({
   ...authTables,
-  numbers: defineTable({
-    value: v.number(),
-  }),
+  players: defineTable({
+    userId: v.id("users"),
+    x: v.number(),
+    y: v.number(),
+    money: v.number(),
+    color: v.string(),
+    lastSeen: v.number(),
+  }).index("by_user", ["userId"]),
+
+  resource_nodes: defineTable({
+    type: v.string(), // "wood", "stone", "ore"
+    x: v.number(),
+    y: v.number(),
+    depleted: v.boolean(),
+    respawnAt: v.optional(v.number()),
+  }).index("by_depleted", ["depleted"]),
+
+  inventory: defineTable({
+    userId: v.id("users"),
+    resourceType: v.string(),
+    amount: v.number(),
+  }).index("by_user_resource", ["userId", "resourceType"]),
+
+  market: defineTable({
+    resourceType: v.string(),
+    price: v.number(),
+    basePrice: v.number(),
+    volume: v.number(), // recent sales volume for price adjustment
+  }).index("by_type", ["resourceType"]),
+
+  chat: defineTable({
+    userId: v.id("users"),
+    userName: v.string(),
+    message: v.string(),
+    x: v.number(),
+    y: v.number(),
+    timestamp: v.number(),
+  }).index("by_timestamp", ["timestamp"]),
 });
