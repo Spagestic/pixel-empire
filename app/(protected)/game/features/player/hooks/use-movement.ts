@@ -39,6 +39,7 @@ export function useMovement({
   const propertiesRef = useRef<Property[]>([]);
   const treesRef = useRef<Tree[]>([]);
   const hungerRef = useRef(hunger);
+  const movementLockedRef = useRef(false);
 
   useEffect(() => {
     propertiesRef.current = properties;
@@ -52,6 +53,20 @@ export function useMovement({
     hungerRef.current = hunger;
   }, [hunger]);
 
+  useEffect(() => {
+    const onMovementLock = (event: Event) => {
+      const customEvent = event as CustomEvent<{ locked?: boolean }>;
+      movementLockedRef.current = Boolean(customEvent.detail?.locked);
+    };
+
+    window.addEventListener("game:set-movement-locked", onMovementLock);
+
+    return () => {
+      movementLockedRef.current = false;
+      window.removeEventListener("game:set-movement-locked", onMovementLock);
+    };
+  }, []);
+
   const resetPosition = useCallback((pos: { x: number; y: number }) => {
     localPos.current = { ...pos };
     setRenderPos({ ...pos });
@@ -59,6 +74,8 @@ export function useMovement({
 
   useEffect(() => {
     const interval = setInterval(() => {
+      if (movementLockedRef.current) return;
+
       const h = hungerRef.current;
       const hungerMultiplier =
         h < HUNGER_SLOW_THRESHOLD

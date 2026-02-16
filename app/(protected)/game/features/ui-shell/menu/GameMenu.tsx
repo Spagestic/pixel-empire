@@ -1,6 +1,7 @@
 "use client";
 
 import { X, Menu } from "lucide-react";
+import { useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -31,6 +32,23 @@ export function GameMenu() {
   const jobsBadge = !!activeJob;
   const hunger = playerInfo.hunger ?? MAX_HUNGER;
   const isLowHunger = hunger <= 25;
+
+  useEffect(() => {
+    const locked = open && (activeNav === "profile" || activeNav === "chat");
+    window.dispatchEvent(
+      new CustomEvent("game:set-movement-locked", {
+        detail: { locked },
+      }),
+    );
+
+    return () => {
+      window.dispatchEvent(
+        new CustomEvent("game:set-movement-locked", {
+          detail: { locked: false },
+        }),
+      );
+    };
+  }, [open, activeNav]);
 
   return (
     <>
