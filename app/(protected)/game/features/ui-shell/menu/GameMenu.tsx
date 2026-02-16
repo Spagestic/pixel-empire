@@ -27,13 +27,14 @@ export function GameMenu() {
 
   const { open, setOpen, activeNav, setActiveNav } = useMenuState();
 
-  if (!playerInfo) return null;
-
+  // Move all hook calls BEFORE the early return
   const jobsBadge = !!activeJob;
-  const hunger = playerInfo.hunger ?? MAX_HUNGER;
+  const hunger = playerInfo?.hunger ?? MAX_HUNGER;
   const isLowHunger = hunger <= 25;
 
   useEffect(() => {
+    if (!playerInfo) return; // Guard inside the effect instead
+
     const locked = open && (activeNav === "profile" || activeNav === "chat");
     window.dispatchEvent(
       new CustomEvent("game:set-movement-locked", {
@@ -48,7 +49,10 @@ export function GameMenu() {
         }),
       );
     };
-  }, [open, activeNav]);
+  }, [open, activeNav, playerInfo]);
+
+  // Now the early return comes AFTER all hooks
+  if (!playerInfo) return null;
 
   return (
     <>
